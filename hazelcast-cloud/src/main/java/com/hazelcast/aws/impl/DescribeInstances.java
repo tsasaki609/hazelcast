@@ -16,9 +16,7 @@
 
 package com.hazelcast.aws.impl;
 
-import com.hazelcast.aws.security.EC2RequestSigner;
-import com.hazelcast.aws.utility.CloudyUtility;
-import com.hazelcast.config.AwsConfig;
+import static com.hazelcast.aws.impl.Constants.*;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -29,10 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-import static com.hazelcast.aws.impl.Constants.DOC_VERSION;
-import static com.hazelcast.aws.impl.Constants.GET;
-import static com.hazelcast.aws.impl.Constants.SIGNATURE_METHOD;
-import static com.hazelcast.aws.impl.Constants.SIGNATURE_VERSION;
+import com.hazelcast.aws.security.EC2RequestSigner;
+import com.hazelcast.aws.utility.CloudyUtility;
+import com.hazelcast.config.AwsConfig;
 
 public class DescribeInstances {
 
@@ -50,6 +47,8 @@ public class DescribeInstances {
         }
         rs = new EC2RequestSigner(awsConfig.getSecretKey());
         attributes.put("Action", this.getClass().getSimpleName());
+        attributes.put("Filter.1.Name", "instance.group-name");
+        attributes.put("Filter.1.Value.1", awsConfig.getSecurityGroupName());
         attributes.put("Version", DOC_VERSION);
         attributes.put("SignatureVersion", SIGNATURE_VERSION);
         attributes.put("SignatureMethod", SIGNATURE_METHOD);
