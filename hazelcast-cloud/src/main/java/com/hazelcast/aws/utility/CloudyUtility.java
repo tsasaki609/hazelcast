@@ -16,17 +16,9 @@
 
 package com.hazelcast.aws.utility;
 
-import com.hazelcast.config.AbstractXmlConfigHelper;
-import com.hazelcast.config.AwsConfig;
-import com.hazelcast.logging.ILogger;
-import com.hazelcast.logging.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import static com.hazelcast.config.AbstractXmlConfigHelper.*;
+import static java.lang.String.*;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -34,8 +26,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.hazelcast.config.AbstractXmlConfigHelper.cleanNodeName;
-import static java.lang.String.format;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.hazelcast.config.AbstractXmlConfigHelper;
+import com.hazelcast.config.AwsConfig;
+import com.hazelcast.logging.ILogger;
+import com.hazelcast.logging.Logger;
 
 public final class CloudyUtility {
     static final ILogger LOGGER = Logger.getLogger(CloudyUtility.class);
@@ -135,7 +137,7 @@ public final class CloudyUtility {
                 final String publicIp = getIp("ipaddress", nodeHolder);
                 final String instanceName = getInstanceName(nodeHolder);
 
-                if (privateIp != null && publicIp != null) {
+                if (privateIp != null) {
                     if (!acceptState(state)) {
                         LOGGER.finest(format("Ignoring EC2 instance [%s][%s] reason:"
                                 + " the instance is not running but %s", instanceName, privateIp, state));
